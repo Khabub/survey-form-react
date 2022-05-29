@@ -4,4 +4,13 @@
   background-color: rgb(44, 27, 105);
   margin-top: 1rem;
   border-radius: 25px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.error {
+  color: red;
+  font-weight: 700;
 }
