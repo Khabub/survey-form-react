@@ -4,18 +4,29 @@ const useFormHook = (props) => {
   const [value, setValue] = useState("");
   const [touch, setTouch] = useState(false);
   const [selected, setSelected] = useState(null);
+  const [improve, setImprove] = useState([]);
 
   const isValid = props(value);
-  // const isSelectValid = selected !== null;
   const hasError = !isValid && touch;
 
   const valueHandler = (event) => {
-    setValue(event.target.value);
+    setValue(event.target.value);    
   };
 
-  const selectHandler = () => { 
-    setValue(true);   
-    setSelected();
+  const selectHandler = (event) => {
+    setSelected(event.value);
+    setValue(true);
+  };
+
+  const improveHandler = (event) => {
+    const { value, checked } = event.target;
+    const improvement = [...improve];
+
+    if (checked) {
+      setImprove([...improvement, value]);
+    } else {
+      setImprove(improvement.filter((e) => e !== value));
+    }
   };
 
   const touchHandler = () => {
@@ -26,18 +37,20 @@ const useFormHook = (props) => {
     setValue("");
     setTouch(false);
     setSelected(null);
+    setImprove([]);
   };
 
   return {
     value,
     isValid,
-    // isSelectValid,
     hasError,
     valueHandler,
     touchHandler,
     reset,
     selectHandler,
+    improveHandler,
     selected,
+    improve,
   };
 };
 
