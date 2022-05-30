@@ -1,7 +1,13 @@
 import React from "react";
 import useFormHook from "../hooks/useFormHook";
 import Select from "react-select";
-import { options, customStyles, optionsFeature } from "../store/select";
+import {
+  options,
+  customStyles,
+  optionsFeature,
+  improvedList,
+} from "../store/select";
+import ImprovedList from "./ImprovedList";
 
 import classes from "./Form.module.scss";
 
@@ -66,13 +72,21 @@ const Form = () => {
     reset: enteredFeatureReset,
   } = useFormHook((value) => value !== "");
 
-    // Improved
-    const {
-      improve: improvedValue,
-      improveHandler: improvedChangeHandler,
-      touchHandler: improvedBlurHandler,
-      reset: enteredImprovedReset,
-    } = useFormHook((value) => value !== "");
+  // Improved
+  const {
+    improve: improvedValue,
+    improveHandler: improvedChangeHandler,
+    touchHandler: improvedBlurHandler,
+    reset: enteredImprovedReset,
+  } = useFormHook((value) => value !== "");
+
+  // Text area
+  const {
+    value: enteredTextarea,
+    valueHandler: textareaChangeHandler,
+    touchHandler: textareaBlurHandler,
+    reset: enteredTextareaReset,
+  } = useFormHook((value) => value.trim() !== "");
 
   // Použít pokud buduchtí mít disabled submit button (disabled={!formIsValid})
   let formIsValid = false;
@@ -107,6 +121,7 @@ const Form = () => {
       console.log(`Recommend: ${recommendValue}`);
       console.log(`Feature: ${selectedFeatureValue}`);
       console.log(`Improved: ${improvedValue}`);
+      console.log(`Text area: ${enteredTextarea}`);
     }
 
     enteredNameReset();
@@ -116,14 +131,34 @@ const Form = () => {
     enteredRecommendReset();
     enteredFeatureReset();
     enteredImprovedReset();
+    enteredTextareaReset();
   };
+
+  let impList = improvedList.map((item) => (
+    <ImprovedList
+      key={item.id}
+      id={item.idname}
+      onChange={improvedChangeHandler}
+      onBlur={improvedBlurHandler}
+      value={item.name}
+    >
+      {item.name}
+    </ImprovedList>
+  ));
 
   return (
     <form className={classes.container} onSubmit={submitForm}>
       {/* --- Name --- */}
-      <div className={classes.name}>
-        <label htmlFor="name">Name</label>
+      <div className={classes.heading}>
+        <label className={classes.labelName} htmlFor="name">
+          Name
+        </label>
         <input
+          className={
+            enteredNameError
+              ? `${classes.inputName} ${classes.errorNOK}`
+              : `${classes.inputName} ${classes.errorOK}`
+          }
           type="text"
           id="name"
           onChange={nameChangeHandler}
@@ -131,14 +166,21 @@ const Form = () => {
           value={enteredName}
         />
         {enteredNameError && (
-          <p className={classes.error}>CHYBA - empty field</p>
+          <span className={classes.errorName}>CHYBA - empty field</span>
         )}
       </div>
 
       {/* --- Email --- */}
-      <div className={classes.email}>
-        <label htmlFor="email">Email</label>
+      <div className={classes.heading}>
+        <label className={classes.labelName} htmlFor="email">
+          Email
+        </label>
         <input
+          className={
+            enteredEmailError
+              ? `${classes.inputName} ${classes.errorNOK}`
+              : `${classes.inputName} ${classes.errorOK}`
+          }
           type="email"
           id="email"
           onChange={emailChangeHandler}
@@ -146,14 +188,21 @@ const Form = () => {
           value={enteredEmail}
         />
         {enteredEmailError && (
-          <p className={classes.error}>CHYBA - missing @</p>
+          <span className={classes.errorEmail}>CHYBA - missing @</span>
         )}
       </div>
 
       {/* --- Age --- */}
-      <div className={classes.age}>
-        <label htmlFor="age">Age (optional)</label>
+      <div className={classes.heading}>
+        <label className={classes.labelName} htmlFor="age">
+          Age (optional)
+        </label>
         <input
+          className={
+            enteredAgeError
+              ? `${classes.inputName} ${classes.errorNOK}`
+              : `${classes.inputName} ${classes.errorOK}`
+          }
           type="number"
           id="age"
           onChange={ageChangeHandler}
@@ -162,16 +211,22 @@ const Form = () => {
           min={15}
           max={99}
         />
-        {enteredAgeError && <p className={classes.error}>CHYBA</p>}
+        {enteredAgeError && (
+          <span className={classes.errorAge}>CHYBA - age not filled</span>
+        )}
       </div>
 
       {/* --- Role --- */}
-      <div className={classes.role}>
-        <label htmlFor="role">
+      <div className={classes.heading}>
+        <label className={classes.labelName} htmlFor="role">
           Which option best describes your current role?
         </label>
         <Select
-          className={classes.select}
+          className={
+            enteredRoleError
+              ? `${classes.inputNameRole} ${classes.errorNOK}`
+              : `${classes.inputNameRole} ${classes.errorOK}`
+          }
           styles={customStyles}
           options={options}
           onChange={roleChangeHandler}
@@ -179,24 +234,27 @@ const Form = () => {
           value={options.filter((obj) => obj.value === selectedValue)}
           placeholder="Select current role"
         />
-        {enteredRoleError && <p className={classes.error}>Choose something</p>}
+        {enteredRoleError && (
+          <span className={classes.errorRole}>Choose something</span>
+        )}
       </div>
 
       {/* --- Recommend --- */}
-      <div className={classes.recommend}>
-        <label htmlFor="recommend">
+      <div className={classes.heading}>
+        <label className={classes.labelName} htmlFor="recommend">
           Would you recommend freeCodeCamp to a friend?
         </label>
         <div>
           <input
+            className={classes.recommend}
             type="radio"
-            id="definitely"
+            id="recommend"
             name="recommendName"
             onChange={recommendChangeHandler}
             onBlur={recommendBlurHandler}
-            value="Definitely"                    
+            value="Definitely"
           />
-          <label htmlFor="definitely">Definitely</label>
+          <label className={classes.labelName} htmlFor="definitely">Definitely</label>
         </div>
         <div>
           <input
@@ -220,11 +278,13 @@ const Form = () => {
           />
           <label htmlFor="notsure">Not Sure</label>
         </div>
-        {enteredRecommendError && <p className={classes.error}>Choose something</p>}
+        {enteredRecommendError && (
+          <p className={classes.error}>Choose something</p>
+        )}
       </div>
 
       {/* --- Feature --- */}
-      <div className={classes.feature}>
+      <div className={classes.heading}>
         <label htmlFor="feature">
           What is your favorite feature of freeCodeCamp?
         </label>
@@ -245,33 +305,24 @@ const Form = () => {
       </div>
 
       {/* --- Improved --- */}
-      <div className={classes.improved}>
+      <div className={classes.heading}>
         <label htmlFor="improved">
-        What would you like to see improved? (Check all that apply)
+          What would you like to see improved? (Check all that apply)
         </label>
+        {impList}
+      </div>
 
-        <div>
-          <input
-            type="checkbox"
-            id="frontend"            
-            onChange={improvedChangeHandler}
-            onBlur={improvedBlurHandler}
-            value="Front-end Projects"            
-          />
-          <label htmlFor="frontend">Front-end Projects</label>
-        </div>
-
-        <div>
-          <input
-            type="checkbox"
-            id="backend"            
-            onChange={improvedChangeHandler}
-            onBlur={improvedBlurHandler}
-            value="Back-end Projects"            
-          />
-          <label htmlFor="backend">Back-end Projects</label>
-        </div>
-
+      {/* --- Comments --- */}
+      <div className={classes.heading}>
+        <label htmlFor="comments">Any comments or suggestions?</label>
+        <textarea
+          id="comments"
+          name="comments"
+          placeholder="Leave a comment here"
+          onChange={textareaChangeHandler}
+          onBlur={textareaBlurHandler}
+          value={enteredTextarea}
+        ></textarea>
       </div>
 
       <div>

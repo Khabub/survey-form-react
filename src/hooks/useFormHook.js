@@ -10,7 +10,7 @@ const useFormHook = (props) => {
   const hasError = !isValid && touch;
 
   const valueHandler = (event) => {
-    setValue(event.target.value);    
+    setValue(event.target.value);
   };
 
   const selectHandler = (event) => {

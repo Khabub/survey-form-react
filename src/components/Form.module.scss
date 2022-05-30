@@ -1,21 +1,100 @@
 .container {
-  width: 90vw;
+  width: 80%;
   height: 1000px;
   background-color: rgb(44, 27, 105);
   margin-top: 1rem;
   border-radius: 25px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  padding: 2rem;
+  max-width: 600px;
+
+  .heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    
+  }
+
+  .labelName {
+    position: absolute;
+    left: 20px;
+    top: -20px;
+  }
+
+  .inputName {
+    width: 95%;
+    border-radius: 10px;
+    height: 1.5rem;
+    max-width: 1000px;
+    margin-bottom: 2rem;    
+  }
+
+  .inputNameRole {
+    width: 95%;
+    border-radius: 10px;
+    height: 1.5rem;
+    max-width: 1000px;
+    margin-bottom: 3.5rem;    
+  }
+
+  .recommend {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    
+  }
+
+  
+  
 }
 
-.error {
-  color: red;
+.errorName {
+  color: red;  
+  font-size: 1rem;
   font-weight: 700;
+  position: absolute;
+  top: -25px;
+  left: 400px;
 }
 
-.role .select{
-  color: "purple";  
-  transform: scale(80%);  
+.errorEmail {
+  color: red;  
+  font-size: 1rem;
+  font-weight: 700;
+  position: absolute;
+  top: -25px;
+  left: 400px;
+}
+
+.errorAge {
+  color: red;  
+  font-size: 1rem;
+  font-weight: 700;
+  position: absolute;
+  top: -25px;
+  left: 400px;
+}
+
+.errorRole {
+  color: red;  
+  font-size: 1rem;
+  font-weight: 700;
+  position: absolute;
+  top: -25px;
+  left: 400px;
+}
+
+.errorOK {
+  border-color: rgb(25, 216, 25);
+  border-width: 0.3rem; 
+}
+
+.errorNOK {
+  border-color: rgb(219, 38, 38);
+  border-width: 0.3rem;
+}
+
+.comments textarea {
+  width: 500px;
+  height: 200px;
 }
