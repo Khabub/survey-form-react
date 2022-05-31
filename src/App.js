@@ -1,5 +1,5 @@
-import classes from './App.module.scss';
-import Form from './components/Form';
+import classes from "./App.module.scss";
+import Form from "./components/Form";
 
 const App = () => {
   return (
@@ -9,6 +9,6 @@ const App = () => {
       <Form />
     </div>
   );
-}
+};
 
 export default App;

@@ -20,6 +20,7 @@ const Form = () => {
     valueHandler: nameChangeHandler,
     touchHandler: nameBlurHandler,
     reset: enteredNameReset,
+    touch: touchName,
   } = useFormHook((value) => value.trim() !== "");
 
   // Email
@@ -30,6 +31,7 @@ const Form = () => {
     valueHandler: emailChangeHandler,
     touchHandler: emailBlurHandler,
     reset: enteredEmailReset,
+    touch: touchEmail,
   } = useFormHook((value) => value.trim().includes("@"));
 
   // Age
@@ -40,6 +42,7 @@ const Form = () => {
     valueHandler: ageChangeHandler,
     touchHandler: ageBlurHandler,
     reset: enteredAgeReset,
+    touch: touchAge,
   } = useFormHook((value) => value.trim() !== "");
 
   // Role select
@@ -50,6 +53,7 @@ const Form = () => {
     selectHandler: roleChangeHandler,
     touchHandler: roleBlurHandler,
     reset: enteredRoleReset,
+    touch: touchRole,
   } = useFormHook((value) => value !== "");
 
   // Recommend radio
@@ -141,10 +145,35 @@ const Form = () => {
       onChange={improvedChangeHandler}
       onBlur={improvedBlurHandler}
       value={item.name}
+      className={classes.improvedBox}
     >
       {item.name}
     </ImprovedList>
   ));
+
+  const classNameNeutral = !touchName
+    ? `${classes.errorNeutral}`
+    : enteredNameError
+    ? `${classes.errorNOK}`
+    : `${classes.errorOK}`;
+
+  const classEmailNeutral = !touchEmail
+    ? `${classes.errorNeutral}`
+    : enteredEmailError
+    ? `${classes.errorNOK}`
+    : `${classes.errorOK}`;
+
+  const classAgeNeutral = !touchAge
+    ? `${classes.errorNeutral}`
+    : enteredAgeError
+    ? `${classes.errorNOK}`
+    : `${classes.errorOK}`;
+
+  const classRoleNeutral = !touchRole
+    ? `${classes.errorNeutral}`
+    : enteredRoleError
+    ? `${classes.errorNOK}`
+    : `${classes.errorOK}`;
 
   return (
     <form className={classes.container} onSubmit={submitForm}>
@@ -154,11 +183,7 @@ const Form = () => {
           Name
         </label>
         <input
-          className={
-            enteredNameError
-              ? `${classes.inputName} ${classes.errorNOK}`
-              : `${classes.inputName} ${classes.errorOK}`
-          }
+          className={`${classes.inputName} ${classNameNeutral}`}
           type="text"
           id="name"
           onChange={nameChangeHandler}
@@ -176,11 +201,7 @@ const Form = () => {
           Email
         </label>
         <input
-          className={
-            enteredEmailError
-              ? `${classes.inputName} ${classes.errorNOK}`
-              : `${classes.inputName} ${classes.errorOK}`
-          }
+          className={`${classes.inputName} ${classEmailNeutral}`}
           type="email"
           id="email"
           onChange={emailChangeHandler}
@@ -188,7 +209,7 @@ const Form = () => {
           value={enteredEmail}
         />
         {enteredEmailError && (
-          <span className={classes.errorEmail}>CHYBA - missing @</span>
+          <span className={classes.errorName}>CHYBA - missing @</span>
         )}
       </div>
 
@@ -198,11 +219,7 @@ const Form = () => {
           Age (optional)
         </label>
         <input
-          className={
-            enteredAgeError
-              ? `${classes.inputName} ${classes.errorNOK}`
-              : `${classes.inputName} ${classes.errorOK}`
-          }
+          className={`${classes.inputName} ${classAgeNeutral}`}
           type="number"
           id="age"
           onChange={ageChangeHandler}
@@ -212,21 +229,17 @@ const Form = () => {
           max={99}
         />
         {enteredAgeError && (
-          <span className={classes.errorAge}>CHYBA - age not filled</span>
+          <span className={classes.errorName}>CHYBA - age not filled</span>
         )}
       </div>
 
       {/* --- Role --- */}
       <div className={classes.heading}>
-        <label className={classes.labelName} htmlFor="role">
+        <label className={classes.labelNameRole} htmlFor="role">
           Which option best describes your current role?
         </label>
         <Select
-          className={
-            enteredRoleError
-              ? `${classes.inputNameRole} ${classes.errorNOK}`
-              : `${classes.inputNameRole} ${classes.errorOK}`
-          }
+          className={`${classes.inputNameRole} ${classRoleNeutral}`}
           styles={customStyles}
           options={options}
           onChange={roleChangeHandler}
@@ -241,12 +254,11 @@ const Form = () => {
 
       {/* --- Recommend --- */}
       <div className={classes.heading}>
-        <label className={classes.labelName} htmlFor="recommend">
+        <label className={classes.labelNameRecommend} htmlFor="recommend">
           Would you recommend freeCodeCamp to a friend?
         </label>
-        <div>
+        <div className={classes.recommendBox}>
           <input
-            className={classes.recommend}
             type="radio"
             id="recommend"
             name="recommendName"
@@ -254,9 +266,9 @@ const Form = () => {
             onBlur={recommendBlurHandler}
             value="Definitely"
           />
-          <label className={classes.labelName} htmlFor="definitely">Definitely</label>
+          <label htmlFor="definitely">Definitely</label>
         </div>
-        <div>
+        <div className={classes.recommendBox}>
           <input
             type="radio"
             id="maybe"
@@ -267,7 +279,7 @@ const Form = () => {
           />
           <label htmlFor="maybe">Maybe</label>
         </div>
-        <div>
+        <div className={classes.recommendBox}>
           <input
             type="radio"
             id="notsure"
@@ -279,17 +291,21 @@ const Form = () => {
           <label htmlFor="notsure">Not Sure</label>
         </div>
         {enteredRecommendError && (
-          <p className={classes.error}>Choose something</p>
+          <span className={classes.error}>Choose something</span>
         )}
       </div>
 
       {/* --- Feature --- */}
       <div className={classes.heading}>
-        <label htmlFor="feature">
+        <label className={classes.labelNameFeature} htmlFor="feature">
           What is your favorite feature of freeCodeCamp?
         </label>
         <Select
-          className={classes.select}
+          className={
+            enteredRoleError
+              ? `${classes.inputNameFeature} ${classes.errorNOK}`
+              : `${classes.inputNameFeature} ${classes.errorOK}`
+          }
           styles={customStyles}
           options={optionsFeature}
           onChange={featureChangeHandler}
@@ -300,22 +316,25 @@ const Form = () => {
           placeholder="Select an option"
         />
         {enteredFeatureError && (
-          <p className={classes.error}>Choose something</p>
+          <span className={classes.errorFeature}>Choose something</span>
         )}
       </div>
 
       {/* --- Improved --- */}
       <div className={classes.heading}>
-        <label htmlFor="improved">
+        <label className={classes.labelNameImproved} htmlFor="improved">
           What would you like to see improved? (Check all that apply)
         </label>
-        {impList}
+        <div className={classes.improvedBox}> {impList}</div>
       </div>
 
       {/* --- Comments --- */}
       <div className={classes.heading}>
-        <label htmlFor="comments">Any comments or suggestions?</label>
+        <label className={classes.labelNameComment} htmlFor="comments">
+          Any comments or suggestions?
+        </label>
         <textarea
+          className={classes.textComments}
           id="comments"
           name="comments"
           placeholder="Leave a comment here"
@@ -326,7 +345,11 @@ const Form = () => {
       </div>
 
       <div>
-        <button type="submit" disabled={!formIsValid}>
+        <button
+          className={formIsValid ? classes.buttonOK : classes.buttonNOK}
+          type="submit"
+          disabled={!formIsValid}
+        >
           Submit
         </button>
       </div>

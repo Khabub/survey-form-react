@@ -51,6 +51,7 @@ const useFormHook = (props) => {
     improveHandler,
     selected,
     improve,
+    touch,
   };
 };
 

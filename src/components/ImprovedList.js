@@ -1,5 +1,4 @@
 import React from "react";
-// import classes from "";
 
 const ImprovedList = (props) => {
   return (
@@ -9,7 +8,8 @@ const ImprovedList = (props) => {
         id={props.id}
         value={props.value}
         onChange={props.onChange}
-        onBlur={props.onBlur}        
+        onBlur={props.onBlur}
+        className={props.className}
       ></input>
       <label htmlFor={props.id}>{props.children}</label>
     </div>
